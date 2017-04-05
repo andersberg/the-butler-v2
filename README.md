@@ -7,7 +7,7 @@ A project exploring new possibilities for opening doors by using speech.
 2. Clone the source code from Github. In the terminal type:
 
     ```
-    git clone git@github.com:apegroup/the-ape-butler.git
+    git clone git@github.com:andersberg/the-butler-v2.git
     ```
 
 ## Dependencies
