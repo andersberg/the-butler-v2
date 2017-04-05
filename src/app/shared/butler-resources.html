@@ -1,0 +1,20 @@
+<link rel="import" href="../../assets/libs/polymer/polymer.html">
+
+<script>
+    Polymer.Behaviors = Polymer.Behaviors || {};
+    Polymer.Behaviors.Resource = [Polymer.AppLocalizeBehavior, {
+
+        properties: {
+            language: {
+                value: `sv`
+            },
+            resources: {
+                value: () => {
+                    return {
+
+                    };
+                }
+            }
+        }
+    }];
+</script>

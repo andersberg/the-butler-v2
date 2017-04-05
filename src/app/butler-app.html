@@ -1,0 +1,240 @@
+<link rel="import" href="../assets/libs/polymer/polymer.html">
+<link rel="import" href="../assets/libs/app-localize-behavior/app-localize-behavior.html">
+<link rel="import" href="../assets/libs/iron-pages/iron-pages.html">
+<link rel="import" href="../assets/libs/iron-ajax/iron-ajax.html">
+<link rel="import" href="../config/config.html">
+
+<link rel="import" href="shared/butler-resources.html">
+
+<dom-module id="butler-app">
+
+    <template>
+        <style>
+            :host {
+                /* LAYOUT */
+                display: flex;
+                flex-direction: column;
+                /*padding-left: 5vw;*/
+                /* Force 16:9 aspect ratio */
+                width: 100vw;
+                height: 75vw;
+                padding: 1rem 5rem;
+                outline: 1px solid lightgrey;
+            }
+
+            header {
+                display: flex;
+                justify-content: flex-end;
+                height: 5%;
+            }
+
+            .version {
+                font-size: 1.6rem;
+            }
+
+            main {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                flex: 1;
+            }
+
+            main[hidden] {
+                display: none;
+            }
+
+            .text::before {
+                content: "> ";
+            }
+
+            .text::after {
+                content: "";
+                display: inline-block;
+                width: 2rem;
+                height: 4.2rem;
+                transform: translate(0.2rem, 1rem);
+                background-color: lightgreen;
+                animation: blink 1s linear infinite;
+            }
+
+            @keyframes blink {
+                50% {opacity: 0;}
+            }
+        </style>
+
+        [[textContent]]
+        <header>
+            <span class="version">the-ape-butler-v1.0.0</span>
+        </header>
+        <main class="container" hidden>
+            <span id="start" class="text">[[text]]</span>
+        </main>
+
+    </template>
+
+    <script>
+        Polymer({
+
+            is: `butler-app`,
+
+            behaviors: [
+                Polymer.AppLocalizeBehavior
+            ],
+
+            listeners: {
+                'nextView': `_showNextView`,
+                'previousView': `_showPreviousView`,
+                'resetViews': `_resetViews`,
+                'recordSpeech': `_recordSpeech`,
+                'recordStop': `_recordStop`,
+                'postToServer': `_postToServer`,
+                'showResponse': `_showResponse`
+            },
+
+            properties: {
+                view: {
+                    type: String,
+                    value: `start`
+                },
+                text: {
+                    type: String,
+                    value: () => {return ``;},
+                    observer: `_observeText`
+                },
+                speech: {
+                    type: String,
+                    value: () => {return ``;},
+                    observer: `_observeSpeech`
+                },
+                recognition: {
+                    type: Object
+                },
+                transcript: {
+                    type: String,
+                    value: null
+                },
+                employee: {
+                    type: String,
+                    value: ``
+                }
+            },
+
+            // LIFE CYCLE
+
+            attached() {
+                const socket = io(`/webclient`);
+                this.recognition = new webkitSpeechRecognition();
+
+                socket.on(`startup`, (response) => {
+                    this.set(`text`, response);
+                    this.$$(`.container`).removeAttribute(`hidden`);
+                });
+
+                socket.on(`newMessage`, (response) => {
+                    console.log(`newMessage: `, response);
+                    this.set(`text`, response);
+                    this.$$(`.container`).removeAttribute(`hidden`);
+                });
+
+                socket.on(`gotCompany`, (response) => {
+                    this.set(`text`, response);
+                    this.$$(`.container`).removeAttribute(`hidden`);
+                });
+
+                socket.on(`greeting`, (response) => {
+                    this.set(`text`, response.text);
+                    this.set(`speech`, response.speech);
+                    this.$$(`.container`).removeAttribute(`hidden`);
+                });
+            },
+
+            _showNextView(event) {
+                const pages = document.querySelector(`iron-pages`);
+                pages.selectNext();
+            },
+
+            _showPreviousView(event) {
+                document.querySelector(`iron-pages`).selectPrevious();
+            },
+
+            _resetViews(event) {
+                document.querySelector(`iron-pages`).selectIndex(0);
+            },
+
+            _recordStop() {
+                recognition.stop();
+                // console.log(`rec stop`)
+            },
+
+            // Record Speech Method
+            _recordSpeech(event) {
+                // console.log(`recording!`)
+
+                recognition.lang = `sv`;
+
+                recognition.start();
+
+                recognition.onaudioend = () => {
+                    Polymer.dom(this.root).querySelector(`butler-app`)._showNextView();
+                }
+
+                recognition.onresult = (event) => {
+                    let transcript = event.results[0][0].transcript;
+                    // console.log(transcript)
+                    Polymer.dom(this.root).querySelector(`butler-app`)._postToServer(transcript);
+                }
+            },
+
+            // Send transcript to server
+            _postToServer(message) {
+                // console.log(`post to server`)
+                // Config request
+                let request = new Request(`/api`, {
+                    method: `POST`,
+                    mode: `same-origin`, // alt. `cors`
+                    redirect: `follow`,
+                    body: JSON.stringify({
+                        message: message
+                    }),
+                    headers: new Headers({
+                        "Content-Type": `application/json`
+                    })
+                });
+
+                // Send request
+                fetch(request)
+                    .then((response) => {
+                        return response.json();
+                    })
+                    .then((response) => {
+                        // console.log(`Server: \n` + response.real_name)
+                        Polymer.dom(this.root).querySelector(`butler-app`)._showResponse(response.real_name);
+                    });
+            },
+
+            _showResponse(name) {
+                this.fire(`nextView`);
+                this.employee = name;
+
+                // Mock app state reset sent from server.
+                // Waiting for web-socket implementation.
+                setTimeout(function () {
+                    Polymer.dom(this.root).querySelector(`butler-app`).fire(`resetViews`);
+                }, 35000); // Long time for demo puropses
+            },
+
+            _handleTap() {
+                this.fire(`nextView`);
+            },
+
+            _observeText(text) {
+                console.log(`_observeText: `, text);
+            },
+
+            _observeSpeech(speech) {
+                console.log(`_observeSpeech: `, speech);
+            }
+
+        });
+    </script>
+</dom-module>

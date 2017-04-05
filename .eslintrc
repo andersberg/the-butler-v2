@@ -1,0 +1,32 @@
+{
+    "root": true,
+    "extends": [
+        "eslint:recommended"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module",
+        "ecmaFeatures": {}
+    },
+    "rules": {
+        "strict": "off",
+        "no-console": "off",
+        "indent": ["error", 4],
+        "quotes": ["error", "backtick"],
+        "linebreak-style": ["error", "unix"],
+        "semi": ["error", "always"],
+        "no-global-assign": ["off"],
+        "no-unsafe-negation": ["off"]
+    },
+    "plugins": [
+        "html"
+    ],
+    "env": {
+        "browser": true,
+        "node": true,
+        "mocha": true
+    },
+    "globals": {
+        "Polymer": true
+    }
+}

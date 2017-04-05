@@ -1,0 +1,60 @@
+{
+    "default": {
+        "text": {
+            "version": [
+                "the-ape-butler-v1.0.0"
+            ],
+            "gotCompany": [
+                "We've got company, (act like we're busy)"
+            ],
+            "greeting": [
+                "Hello Human!"
+            ],
+            "listening": [
+                "I'm listening..."
+            ],
+            "thinking.hmm": [
+                "Hmm let's see"
+                ],
+            "thinking": [
+                "Think think think...",
+                "Searching the main data computer",
+                "Stupid human names..."
+            ],
+            "error": [
+                "AAAAAAAAAAAAAAARGH",
+                "ERROR ERROR ERROR",
+                "Explosion imminent"
+            ],
+            "success": [
+                "Booyakasha",
+                "Me thinks me have a match"
+            ],
+            "notified": [
+                "me thinks you have a visitor",
+                "(Mike drop)"
+            ],
+            "finished": []
+        },
+        "speech": {
+            "greeting": [
+                "Hello human, who are you here to meet?"
+            ],
+            "thinking": [
+                "Ok, just a minute"
+            ],
+            "error": [
+                "Sorry, I couldn't understand you, I'm a pretty new robot"
+            ],
+            "success": [
+                "Boom, I am the best"
+            ],
+            "notified": [
+                "Ok, I have told {person} you are here"
+            ],
+            "finished": [
+                "Someone will come open the door soon"
+            ]
+        }
+    }
+}

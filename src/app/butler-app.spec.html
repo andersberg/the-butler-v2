@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Webcomponent test</title>
+    <script src="../../web-component-tester/browser.js"></script>
+    <link rel="import" href="x-app.html">
+
+</head>
+
+<body>
+
+    <test-fixture id="x-app">
+        <template>
+            <x-app></x-app>
+        </template>
+    </test-fixture>
+
+    <script>
+
+        suite(`<x-app>`, function () {
+
+            let element;
+            setup(() => {
+                element = fixture(`x-app`);
+            });
+
+            test(`hello function`, () => {
+                expect(element.test()).to.be.equal(`test`);
+            });
+
+        });
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,62 @@
+{
+    "default": {
+        "text": {
+            "startup": [
+                "We've got company, (act like we're busy)"
+            ],
+            "greeting": [
+                "Hello human!"
+            ],
+            "listening": [
+                "I'm listening..."
+            ],
+            "thinking": [
+                "Hmm let's see",
+                "Think think think...",
+                "Searching the main data computer",
+                "Stupid human names..."
+            ],
+            "error": [
+                "AAAAAAAAAAAAAAARGH",
+                "ERROR ERROR ERROR",
+                "Explosion imminent"
+            ],
+            "success": [
+                "Booyakasha",
+                "Me thinks me have a match"
+            ],
+            "notified": [
+                " me thinks you have a visitor",
+                "(Mike drop)"
+            ],
+            "end": [
+                "Someone will come open the door soon"
+            ]
+        },
+        "speech": {
+            "startup": [],
+            "greeting": [
+                "Hello human, who are you here to meet?"
+            ],
+            "listening": [],
+            "thinking": [
+                "Ok, just a minute"
+            ],
+            "error": [
+                "Sorry, I couldn't understand you, I'm a pretty new robot"
+            ],
+            "success": [
+                "Boom, I am the best"
+            ],
+            "notified": [
+                "Ok, I have told ",
+                " you are here"
+            ],
+            "end": [
+                "Someone will come open the door soon"
+            ]
+        }
+    },
+    "happy": {},
+    "grumpy": {}
+}

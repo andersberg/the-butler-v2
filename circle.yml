@@ -1,0 +1,57 @@
+# ----------------
+# MACHINE CONFIGURATION
+# https://circleci.com/docs/configuration/#machine
+# ----------------
+machine:
+  timezone:
+    Europe/Stockholm
+  environment:
+    VERSION: $(echo $CIRCLE_TAG | sed 's/[\",.,-]//g')
+    DEV_PROJECT_NAME: dev-xxxx-xxx
+    STG_PORJECT_NAME: stg-xxxx-xxx
+    PRD_PROJECT_NAME: prd-xxxx-xxx
+
+
+# ----------------
+# DEPLOYMENT
+# https://circleci.com/docs/configuration/#deployment
+# ----------------
+deployment:
+  dev:
+    tag: /^v\d+\.\d+\.\d+-build\.\d+$/
+    owner: apegroup
+    commands:
+      # BUILD
+      - npm run gulp build --dev
+
+      # FIREBASE DEPLOYMENT
+    #   - firebase deploy --project=$DEV_PROJECT_NAME --token=$FIREBASE_TOKEN --message=$VERSION --only=hosting --non-interactive
+
+      # GCLOUD DEPLOYMENT
+    #   - TODO
+
+  stage:
+    tag: /^v\d+\.\d+\.\d+-rc\.\d+$/
+    owner: apegroup
+    commands:
+      # BUILD
+      - npm run gulp build --stg
+
+      # FIREBASE DEPLOYMENT
+    #   - firebase deploy --project=$STG_PROJECT_NAME --token=$FIREBASE_TOKEN --message=$VERSION --only=hosting --non-interactive
+
+      # GCLOUD DEPLOYMENT
+    #   - TODO
+
+  prod:
+    tag: /^v\d+\.\d+\.\d+$/
+    owner: apegroup
+    commands:
+      # BUILD
+      - npm run gulp build --prd
+
+      # FIREBASE DEPLOYMENT
+    #   - firebase deploy --project=$PRD_PROJECT_NAME --token=$FIREBASE_TOKEN --message=$VERSION --only=hosting --non-interactive
+
+      # GCLOUD DEPLOYMENT
+    #   - TODO

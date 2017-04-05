@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <base href="/">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=no">
+
+    <title>The Ape Butler - Admin Page</title>
+    <meta name="description" content="The Ape Butler - Admin Page">
+
+    <link rel="manifest" href="assets/icons/manifest.json">
+    <link rel="icon" type="image/png" href="assets/icons/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" type="image/png" href="assets/icons/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="assets/icons/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/png" href="assets/icons/favicon-230x230.png" sizes="230x230">
+
+    <!-- Socket.io client is exposed by Socket.io server -->
+    <script src="/socket.io/socket.io.js"></script>
+
+    <style>
+        /**
+         * PAGE STYLES
+         */
+        :root {
+            --baseline: 2.4rem;
+            /* font-size-md x line-height-comfort */
+            --line-height: 1.2;
+            --line-height-comfort: 1.6;
+            --font-size-sm: 1.4rem;
+            --font-size-md: 1.6rem;
+            --font-size-lg: 1.8rem;
+            --xxs: calc(var(--baseline) / 3);
+            --xs: calc(var(--baseline) / 2);
+            --sm: calc(var(--baseline) / 1.5);
+            --md: var(--baseline);
+            --lg: calc(var(--baseline) * 1.5);
+            --xl: calc(var(--baseline) * 2);
+            --xxl: calc(var(--baseline) * 3);
+
+            /* COLORS */
+            --white-color: #ffffff;
+            --black-color: #222630;
+            --green-color: #68C7BE;
+            --light-green-color: lightgreen;
+            --light-grey: #E8E9EA;
+
+            /* BORDER */
+            --border: 0.2rem solid var(--black-color);
+        }
+
+        * {
+            font-family: inherit;
+            line-height: inherit;
+            color: inherit;
+            box-sizing: border-box;
+        }
+
+        html {
+            height: 100%;
+            font-family: "MuseoSans500", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 62.5%;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: var(--line-height);
+            background-color: var(--white-color);
+            color: var(--black-color);
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            /*max-width: 80rem;*/
+            padding: 2rem;
+        }
+
+        /**
+         * GENERAL STYLES
+         */
+        header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+        }
+
+        header h1 {
+            color: var(--green-color);
+            font-size: 4rem;
+            font-weight: 300;
+            margin: 0;
+            border-bottom: var(--border);
+            border-color: var(--green-color);
+        }
+
+        header a {
+            align-self: flex-end;
+            font-size: 1.4rem;
+        }
+
+        header a:hover {
+            color: var(--green-color);
+        }
+
+        section {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            width: 100%;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+            border-bottom: var(--border);
+            border-bottom-color: var(--light-grey);
+        }
+
+        section .heading {
+            flex-basis: 100%;
+            flex-shrink: 0;
+            font-size: 2rem;
+            font-weight: 400;
+            margin: 1rem 0;
+        }
+
+        input {
+            flex-basis: 100%;
+            color: var(--black-color);
+            border: var(--border);
+            height: 5rem;
+            padding: 1rem 2rem;
+            font-size: 1.6rem;
+        }
+
+        button {
+            height: 5rem;
+            width: 100%;
+            padding: 1rem 2rem;
+            font-size: 1.6rem;
+            font-weight: 700;
+            border: var(--border);
+            background-color: var(--black-color);
+            color: var(--white-color);
+            transition: 0.5s ease;
+        }
+
+        button:hover {
+            background-color: var(--white-color);
+            color: var(--black-color);
+        }
+
+        /**
+         * SECTION STYLES
+         */
+        .update-buttons > div {
+            flex-basis: 47.5%;
+            margin-bottom: 2rem;
+            margin-right: 5%;
+        }
+
+        .update-buttons > div:nth-child(even) {
+            margin-right: 0;
+        }
+
+        .butler-responses > div {
+            margin: 0 1rem 1rem 0;
+        }
+
+        .butler-responses > div > button {
+            height: 5rem;
+        }
+
+        button#start-button {
+            color: var(--white-color);
+            background-color: var(--light-green-color);
+            border-color: var(--light-green-color);
+        }
+
+        button#start-button:hover {
+            background-color: var(--white-color);
+            color: var(--light-green-color);
+        }
+
+        .status-loading,
+        .status-done,
+        #name-status {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            align-self: center;
+            position: relative;
+            height: 5rem;
+            align-content: center;
+            left: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .send-name > button {
+            width: 25%;
+            margin-top: 2rem;
+        }
+
+        .status-loading {
+            animation: pulse 2.1s infinite;
+        }
+
+        @keyframes pulse {
+            50% { opacity: 0;}
+        }
+
+        .output-container {
+            display: flex;
+            padding: 1rem;
+            background-color: var(--light-grey);
+        }
+
+        #output {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #output > span {
+            font-size: 1.2rem;
+            padding-bottom: 0.5rem;
+        }
+
+        /**
+         * FONTS
+         */
+        @font-face {
+            font-family: 'MuseoSans300';
+            src: url('../assets/fonts/MuseoSans300.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'MuseoSans500';
+            src: url('/assets/fonts/MuseoSans500.woff2') format('woff2');
+        }
+
+        @font-face {
+            font-family: 'MuseoSans900';
+            src: url('../assets/fonts/MuseoSans900.woff2') format('woff2');
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1 class="title">Butler Admin</h1>
+    </header>
+
+    <section class="update-buttons">
+        <div class="startup">
+            <button id="start-button" class="button">Start web Client</button>
+        </div>
+
+        <div class="startup">
+            <button id="open-client" class="button">
+                <a href="/client" target="_blank" class="to-client">Open Web Client</a>
+            </button>
+        </div>
+
+        <div class="update-slack">
+            <button id="slack-button" class="button">Update Slack Users</button>
+            <span id="slack-loading" class="status-loading">Updating Slack users...</span>
+            <span id="slack-done" class="status-done">Slack users updated.</span>
+        </div>
+
+        <div class="update-wit">
+            <button id="wit-button" class="button">Update Wit.ai Entity values</button>
+            <span id="wit-loading" class="status-loading">Updating entities...</span>
+            <span id="wit-done" class="status-done">Wit.ai Entity values updated.</span>
+        </div>
+
+        <div class="doorbell">
+            <button id="doorbell-button">Ring doorbell</button>
+        </div>
+    </section>
+
+    <section class="send-name">
+        <h2 class="heading">Send message to server</h2>
+        <input id="name-input" type="text" value="Anders Berg">
+        <button id="name-button" class="button">Send</button>
+        <span id="name-status">Sending message...</span>
+    </section>
+
+    <section id="text-response-buttons" class="butler-responses">
+        <h2 class="heading">Send text responses to connected clients</h2>
+
+    </section>
+
+    <section id="speech-response-buttons" class="butler-responses">
+        <h2 class="heading">Send speech responses to connected clients</h2>
+
+    </section>
+
+    <section class="output-container">
+        <h2 class="heading">Output:</h2>
+        <div id="output"></div>
+    </section>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

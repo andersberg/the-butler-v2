@@ -1,0 +1,66 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    // Configure editor settings
+    "editor.cursorStyle": "line",
+    "editor.rulers": [],
+    "editor.wordWrap": "off",
+    "editor.renderWhitespace": "all",
+    "editor.renderIndentGuides": true,
+    "editor.folding": false,
+    "diffEditor.renderSideBySide": true,
+    "workbench.editor.enablePreview": true,
+    "workbench.editor.enablePreviewFromQuickOpen": true,
+    "telemetry.enableTelemetry": false,
+    "html.format.wrapLineLength": 0,
+    "telemetry.enableCrashReporter": false,
+    // Configure glob patterns for excluding files and folders in searches. Inherits all glob patterns from the file.exclude setting.
+    "search.exclude": {
+        "**/src/assets/libs": true,
+        "**/gulp": false,
+        "**/build": true,
+        "**/resources": false,
+        "**/*.md": false,
+        "**/bin": false,
+        "**/bower.json": false,
+        "**/.git": false,
+        "**/.gitignore": false,
+        "**/.eslintrc": false,
+        "**/.gitattributes": false,
+        "**/.editorconfig": false,
+        "**/.vscode": false,
+        "**/.bowerrc": false,
+        "**/.babelrc": false,
+        "**/.gitkeep": false,
+        "**/.eslintignore": false
+    },
+    // Configure glob patterns for excluding files and folders.
+    "files.exclude": {
+        "**/node_modules": false,
+        "**/bin": false,
+        "**/.git": false,
+        "**/.eslintrc": false,
+        "**/.editorconfig": false,
+        "**/.vscode": false,
+        "**/.bowerrc": false,
+        "**/.babelrc": false,
+        "**/.gitattributes": false,
+        "**/.gitignore": false,
+        "**/.gitkeep": false,
+        "**/.DS_Store": true
+    },
+    // Enables or disables all validations
+    "css.validate": false,
+    // Controls whether stylelint is enabled for CSS files or not.
+    "stylelint.enable": true,
+    // Controls VSCode's JavaScript validation. If set to false both syntax and semantic validation is disabled.
+    "javascript.validate.enable": false,
+    // Controls whether eslint is enabled for JavaScript files or not.
+    "eslint.enable": true,
+    // Enable eslint in javascipt and html files.
+    "eslint.validate": [
+        "javascript",
+        "html"
+    ]
+,
+"vsicons.presets.angular": false
+}

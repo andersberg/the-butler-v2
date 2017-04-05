@@ -1,0 +1,29 @@
+{
+  "name": "the-ape-butler",
+  "description": "Web Client for The Ape Butler Progressive Web Application. Hand coded in Stockholm, Sweden.",
+  "main": "index.html",
+  "authors": [
+    "Apegroup AB"
+  ],
+  "license": "Apegroup AB All rights reserved.",
+  "moduleType": [
+    "es6"
+  ],
+  "homepage": "http://apegroup.com",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "polymer": "^1.7.1",
+    "app-route": "PolymerElements/app-route#^0.9.3",
+    "iron-pages": "PolymerElements/iron-pages#^1.0.8",
+    "iron-media-query": "PolymerElements/iron-media-query#^1.0.8",
+    "iron-ajax": "PolymerElements/iron-ajax#^1.4.3",
+    "app-localize-behavior": "PolymerElements/app-localize-behavior#^0.10.2"
+  }
+}
